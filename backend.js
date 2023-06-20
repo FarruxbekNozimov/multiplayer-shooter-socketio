@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-// SOCKET IO SETUP
+// socket.io setup
 const http = require('http')
 const server = http.createServer(app)
 const { Server } = require('socket.io')
@@ -20,12 +20,14 @@ const backEndPlayers = {}
 const SPEED = 10
 
 io.on('connection', (socket) => {
+  console.log('a user connected')
   backEndPlayers[socket.id] = {
     x: 500 * Math.random(),
     y: 500 * Math.random(),
     color: `hsl(${360 * Math.random()}, 100%, 50%)`,
     sequenceNumber: 0
   }
+
   io.emit('updatePlayers', backEndPlayers)
 
   socket.on('disconnect', (reason) => {
@@ -54,6 +56,8 @@ io.on('connection', (socket) => {
         break
     }
   })
+
+  console.log(backEndPlayers)
 })
 
 setInterval(() => {
@@ -63,3 +67,5 @@ setInterval(() => {
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+console.log('server did load')
